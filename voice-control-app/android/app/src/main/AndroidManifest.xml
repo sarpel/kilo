@@ -62,14 +62,14 @@
             android:name=".VoiceProcessingService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="audio" />
+            android:foregroundServiceType="microphone" />
 
         <!-- Audio Recording Service -->
         <service
             android:name=".AudioRecordingService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="audio" />
+            android:foregroundServiceType="microphone" />
 
         <!-- React Native Module Services -->
         <service

@@ -227,17 +227,7 @@ public class AudioRecorderModule extends com.facebook.react.bridge.ReactContextB
     // Public methods for VoiceControlTileService to access
     public void startBackgroundRecording() {
         try {
-            startRecording(new com.facebook.react.bridge.Promise() {
-                @Override
-                public void resolve(Object value) {
-                    Log.d(TAG, "Background recording started");
-                }
-                
-                @Override
-                public void reject(String code, String message) {
-                    Log.e(TAG, "Failed to start background recording: " + message);
-                }
-            });
+            startRecording(new SimplePromise(TAG, "Background recording start"));
         } catch (Exception e) {
             Log.e(TAG, "Error starting background recording", e);
         }
@@ -245,17 +235,7 @@ public class AudioRecorderModule extends com.facebook.react.bridge.ReactContextB
     
     public void stopBackgroundRecording() {
         try {
-            stopRecording(new com.facebook.react.bridge.Promise() {
-                @Override
-                public void resolve(Object value) {
-                    Log.d(TAG, "Background recording stopped");
-                }
-                
-                @Override
-                public void reject(String code, String message) {
-                    Log.e(TAG, "Failed to stop background recording: " + message);
-                }
-            });
+            stopRecording(new SimplePromise(TAG, "Background recording stop"));
         } catch (Exception e) {
             Log.e(TAG, "Error stopping background recording", e);
         }
@@ -263,5 +243,70 @@ public class AudioRecorderModule extends com.facebook.react.bridge.ReactContextB
     
     public boolean isCurrentlyRecording() {
         return isRecording.get();
+    }
+
+    private static class SimplePromise implements Promise {
+        private String tag;
+        private String operation;
+        
+        public SimplePromise(String tag, String operation) {
+            this.tag = tag;
+            this.operation = operation;
+        }
+
+        @Override
+        public void resolve(Object value) {
+            Log.d(tag, operation + " success");
+        }
+
+        @Override
+        public void reject(String code, String message) {
+            Log.e(tag, operation + " failed: " + message);
+        }
+
+        @Override
+        public void reject(String code, Throwable throwable) {
+            Log.e(tag, operation + " failed: " + code, throwable);
+        }
+
+        @Override
+        public void reject(String code, String message, Throwable throwable) {
+            Log.e(tag, operation + " failed: " + message, throwable);
+        }
+
+        @Override
+        public void reject(Throwable throwable) {
+            Log.e(tag, operation + " failed", throwable);
+        }
+
+        @Override
+        public void reject(Throwable throwable, WritableMap userInfo) {
+            Log.e(tag, operation + " failed", throwable);
+        }
+
+        @Override
+        public void reject(String code, WritableMap userInfo) {
+            Log.e(tag, operation + " failed: " + code);
+        }
+
+        @Override
+        public void reject(String code, Throwable throwable, WritableMap userInfo) {
+            Log.e(tag, operation + " failed: " + code, throwable);
+        }
+
+        @Override
+        public void reject(String code, String message, WritableMap userInfo) {
+            Log.e(tag, operation + " failed: " + message);
+        }
+
+        @Override
+        public void reject(String code, String message, Throwable throwable, WritableMap userInfo) {
+            Log.e(tag, operation + " failed: " + message, throwable);
+        }
+        
+        @Override
+        public void reject(String code) {
+             Log.e(tag, operation + " failed: " + code);
+        }
     }
 }
